@@ -54,7 +54,7 @@
     </b-form>
     </div>
     <div class="col-sm-6">
-      <h2>Yeah! here you can publish a post: (Name)</h2>
+      <h2>Yeah! here you can publish a post: {{ userData }} </h2>
     </div>
     </div>
     <div class="row">
@@ -66,7 +66,7 @@
         >
           <b-card-body>
             
-            <h6 class="card-subtitle mb-2 text-muted">Name</h6>
+            <h6 class="card-subtitle mb-2 text-muted">{{item.name}}</h6>
             <b-card-text>{{ item.description }}</b-card-text>
             <b-button
               class="btn-info mr-2 btn-sm"
@@ -84,6 +84,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   data() {
     return {
@@ -91,7 +93,7 @@ export default {
       dismissSecs: 3,
       dismissCountDown: 0,
       message: { color: "", text: "" },
-      NewPost: { title: "", description: "" },
+      NewPost: { title: "",name: "", description: "" },
       EditPost: {},
       edit: false,
     };
@@ -101,8 +103,13 @@ export default {
   },
   methods: {
     showPosts() {
+      let config = {
+        headers: {
+          token: this.token
+        }
+      }
       this.axios
-        .get("/posts")
+        .get("/posts", config)
         .then((res) => {
           this.posts = res.data;
         })
@@ -111,9 +118,15 @@ export default {
         });
     },
     addPost() {
+       let config = {
+        headers: {
+          token: this.token
+        }
+      }
       this.axios
-        .post("/new-post", this.NewPost)
+        .post("/new-post", this.NewPost, config)
         .then((res) => {
+          console.log(res.data)
           this.posts.push(res.data);
           this.NewPost.title = "";
           this.NewPost.description = "";
@@ -123,9 +136,8 @@ export default {
         })
         .catch((err) => {
           console.log(err.response);
-          if (err.response.data.error.errors.title.properties.message) {
-            this.message.text =
-              err.response.data.error.errors.title.properties.message;
+          if (err.response.data.err.message) {
+            this.message.text = err.response.data.err.message;
           } else {
             this.message.text = "System error";
           }
@@ -182,6 +194,9 @@ export default {
     showAlert() {
       this.dismissCountDown = this.dismissSecs;
     },
+  },
+  computed: {
+    ...mapState(['token', 'userData'])
   },
 };
 </script>

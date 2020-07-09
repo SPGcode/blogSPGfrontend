@@ -11,7 +11,7 @@ export default new Vuex.Store({
   state: {
     token: '',
     userDB: '',
-    userData: ''
+    userDataName: ''
   },
   mutations: {
     getUser(state, payload){
@@ -20,22 +20,23 @@ export default new Vuex.Store({
         state.userDB = '';
       } else{
         state.userDB = decode(payload);
-        console.log(state.userData)
         router.push({name: 'Post'});
       }
     },
     setUserData(state, payload){
-      state.userData = payload
+      state.userDataName = payload
     }
   },
   actions: {
     keepUser({commit}, payload){
       localStorage.setItem('token', payload);
+
       commit('getUser', payload)
     },
     getDataUser({commit}, payload){
       const user = payload
-      commit('setUserData', user)
+      localStorage.setItem('name', user.name)
+      commit('setUserData', user.name)
     },
     closeSession({commit}){
       commit('getUser', '');
@@ -51,9 +52,13 @@ export default new Vuex.Store({
       }else{
         commit('getUser', '');
       }
+    },
+    readName({commit}){
+      const name = localStorage.getItem('name');
+      commit('setUserData', name)
     }
   },
   getters: {
-    userActive: state => !!state.token
+    userActive: state => !!state.token,
   }
 })

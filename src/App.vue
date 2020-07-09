@@ -42,13 +42,14 @@ import  { mapActions, mapGetters } from 'vuex'
 
 export default {
     methods: {
-      ...mapActions(['closeSession', 'readToken'])
+      ...mapActions(['closeSession', 'readToken', 'readName'])
     },
     computed: {
       ...mapGetters(['userActive'])
     },
     created() {
       this.readToken();
+      this.readName();
     },
 }
 </script>

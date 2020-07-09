@@ -52,9 +52,9 @@ export default {
       this.axios
         .post("/login", this.user)
         .then((res) => {
-          console.log(res.data);
           const token = res.data.token;
-          const dataUser = res.data.userDB.name
+          const dataUser = res.data.userDB
+          console.log(dataUser);
           this.keepUser(token);
           this.getDataUser(dataUser);
         })

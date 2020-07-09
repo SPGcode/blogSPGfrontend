@@ -42,6 +42,12 @@
         required
         v-model="NewPost.title"
       ></b-form-input>
+       <b-form-input
+        type="text"
+        class="form-control my-2"
+        :value="userDataName"
+        v-model="NewPost.name"
+      ></b-form-input>
       <b-form-textarea
         type="text"
         class="form-control my-2"
@@ -54,7 +60,7 @@
     </b-form>
     </div>
     <div class="col-sm-6">
-      <h2>Yeah! here you can publish a post: {{ userData }} </h2>
+      <h2>Yeah! here you can publish a post: {{ userDataName }} </h2>
     </div>
     </div>
     <div class="row">
@@ -98,6 +104,9 @@ export default {
       edit: false,
     };
   },
+  computed: {
+    ...mapState(['token', 'userDataName'])
+  },
   created() {
     this.showPosts();
   },
@@ -112,6 +121,7 @@ export default {
         .get("/posts", config)
         .then((res) => {
           this.posts = res.data;
+          console.log(res.data)
         })
         .catch((err) => {
           console.log(err.response);
@@ -120,7 +130,7 @@ export default {
     addPost() {
        let config = {
         headers: {
-          token: this.token
+          token: this.token,
         }
       }
       this.axios
@@ -129,6 +139,7 @@ export default {
           console.log(res.data)
           this.posts.push(res.data);
           this.NewPost.title = "";
+          this.NewPost.name = "";
           this.NewPost.description = "";
           this.message.color = "success";
           this.message.text = "Post added";
@@ -194,9 +205,6 @@ export default {
     showAlert() {
       this.dismissCountDown = this.dismissSecs;
     },
-  },
-  computed: {
-    ...mapState(['token', 'userData'])
-  },
+  }
 };
 </script>

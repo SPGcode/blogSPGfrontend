@@ -42,12 +42,6 @@
         required
         v-model="NewPost.title"
       ></b-form-input>
-       <b-form-input
-        type="text"
-        class="form-control my-2"
-        :value="userDataName"
-        v-model="NewPost.name"
-      ></b-form-input>
       <b-form-textarea
         type="text"
         class="form-control my-2"
@@ -60,7 +54,7 @@
     </b-form>
     </div>
     <div class="col-sm-6">
-      <h2>Yeah! here you can publish a post: {{ userDataName }} </h2>
+      <h2>Yeah! here you can publish a post: {{ userDataName }} {{userTokenId}}</h2>
     </div>
     </div>
     <div class="row">
@@ -69,11 +63,13 @@
         :title= item.title
         style="max-width: 20rem;"
         class="mb-2"
+        v-if="userTokenId === item.userId"
         >
           <b-card-body>
             
             <h6 class="card-subtitle mb-2 text-muted">{{item.name}}</h6>
             <b-card-text>{{ item.description }}</b-card-text>
+            <b-card-text>{{ item.userId }}</b-card-text>
             <b-button
               class="btn-info mr-2 btn-sm"
               @click="activateEdit(item._id)"
@@ -91,11 +87,14 @@
 
 <script>
 import { mapState } from 'vuex'
+//jwt decode token
+import decode from 'jwt-decode'
 
 export default {
   data() {
     return {
       posts: [],
+      userTokenId: "",
       dismissSecs: 3,
       dismissCountDown: 0,
       message: { color: "", text: "" },
@@ -108,7 +107,10 @@ export default {
     ...mapState(['token', 'userDataName'])
   },
   created() {
+    const userToken = decode(this.token);
+    this.userTokenId = userToken.data._id;
     this.showPosts();
+
   },
   methods: {
     showPosts() {

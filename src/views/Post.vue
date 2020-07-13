@@ -1,81 +1,80 @@
 <template>
-  <div class="container">
+  <div class="container mt-2">
     <div class="row">
       <div class="col-sm-4">
-    <b-alert
-      :show="dismissCountDown"
-      dismissible
-      :variant="message.color"
-      @dismissed="dismissCountDown = 0"
-      @dismiss-count-down="countDownChanged"
-    >
-      <p>{{ message.text }}</p>
-    </b-alert>
-    <b-form @submit.prevent="editPost(EditPost)" v-if="edit">
-      <h3>Edit Post</h3>
-      <b-form-group>
-      <b-form-input
-        type="text"
-        class="form-control my-2"
-        placeholder="title"
-        v-model="EditPost.title"
-      ></b-form-input>
-      <b-form-textarea
-        type="text"
-        class="form-control my-2"
-        placeholder="Description"
-        v-model="EditPost.description"
-      ></b-form-textarea>
-      </b-form-group>
-      <b-button class="btn-warning my-2 mx-2" type="submit">Edit</b-button>
-      <b-button class="btn-danger my-2" type="submit" @click="edit = false"
-        >Cancel</b-button
-      >
-    </b-form>
-    <b-form @submit.prevent="addPost" v-if="!edit">
-      <h3>New Post</h3>
-      <b-form-group>
-      <b-form-input
-        type="text"
-        class="form-control my-2"
-        placeholder="title"
-        required
-        v-model="NewPost.title"
-      ></b-form-input>
-      <b-form-textarea
-        type="text"
-        class="form-control my-2"
-        placeholder="Description"
-        required
-        v-model="NewPost.description"
-      ></b-form-textarea>
-      </b-form-group>
-      <b-button class="btn-info my-2 btn-block" type="submit">Add</b-button>
-    </b-form>
-    </div>
-    <div class="col-sm-6">
-      <h2>Yeah! here you can publish a post: {{ userDataName }} {{userTokenId}}</h2>
-    </div>
+        <b-alert
+          :show="dismissCountDown"
+          dismissible
+          :variant="message.color"
+          @dismissed="dismissCountDown = 0"
+          @dismiss-count-down="countDownChanged"
+        >
+          <p>{{ message.text }}</p>
+        </b-alert>
+        <b-form @submit.prevent="editPost(EditPost)" v-if="edit">
+          <h3>Edit Post</h3>
+          <b-form-group>
+            <b-form-input
+              type="text"
+              class="form-control my-2"
+              placeholder="title"
+              v-model="EditPost.title"
+            ></b-form-input>
+            <b-form-textarea
+              type="text"
+              class="form-control my-2"
+              placeholder="Description"
+              v-model="EditPost.description"
+            ></b-form-textarea>
+          </b-form-group>
+          <b-button class="btn-warning my-2 mx-2" type="submit">Save</b-button>
+          <b-button class="btn-danger my-2" type="submit" @click="edit = false"
+            >Cancel</b-button
+          >
+        </b-form>
+        <b-form @submit.prevent="addPost" v-if="!edit">
+          <h3>New Post</h3>
+          <b-form-group>
+            <b-form-input
+              type="text"
+              class="form-control my-2"
+              placeholder="title"
+              required
+              v-model="NewPost.title"
+            ></b-form-input>
+            <b-form-textarea
+              type="text"
+              class="form-control my-2"
+              placeholder="Description"
+              required
+              v-model="NewPost.description"
+            ></b-form-textarea>
+          </b-form-group>
+          <b-button class="btn-info my-2 btn-block" type="submit">Add</b-button>
+        </b-form>
+      </div>
+      <div class="col-sm-6">
+        <h2>Yeah! here you can publish a post: {{ userName }}</h2>
+      </div>
     </div>
     <div class="row">
-      <div class="col-sm-4" v-for="(item, index) in posts" :key="index">
+      <div class="col-sm-4" v-for="(post, index) in posts" :key="index">
         <b-card
-        :title= item.title
-        style="max-width: 20rem;"
-        class="mb-2"
-        v-if="userTokenId === item.userId"
+          :title="post.title"
+          style="max-width: 20rem;"
+          class="mb-2"
+          v-if="userId === post.userId"
         >
           <b-card-body>
-            
-            <h6 class="card-subtitle mb-2 text-muted">{{item.name}}</h6>
-            <b-card-text>{{ item.description }}</b-card-text>
-            <b-card-text>{{ item.userId }}</b-card-text>
+            <!--<h6 class="card-subtitle mb-2 text-muted">{{post.description}}</h6>-->
+            <b-card-text>{{ post.description }}</b-card-text>
+            <b-card-text class="text-muted">{{ post.userName }}</b-card-text>
             <b-button
               class="btn-info mr-2 btn-sm"
-              @click="activateEdit(item._id)"
+              @click="activateEdit(post._id)"
               >Edit</b-button
             >
-            <b-button class="btn-danger btn-sm" @click="deletePost(item._id)"
+            <b-button class="btn-danger btn-sm" @click="deletePost(post._id)"
               >Delete</b-button
             >
           </b-card-body>
@@ -86,59 +85,58 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 //jwt decode token
-import decode from 'jwt-decode'
+import decode from "jwt-decode";
 
 export default {
   data() {
     return {
       posts: [],
-      userTokenId: "",
+      userName: "",
+      userId: "",
       dismissSecs: 3,
       dismissCountDown: 0,
       message: { color: "", text: "" },
-      NewPost: { title: "",name: "", description: "" },
+      NewPost: { title: "", name: "", description: "" },
       EditPost: {},
       edit: false,
     };
   },
   computed: {
-    ...mapState(['token', 'userDataName'])
+    ...mapState(["token", "userDB"]),
   },
   created() {
-    const userToken = decode(this.token);
-    this.userTokenId = userToken.data._id;
+    const userDbId = this.userDB.data._id;
+    this.userName = this.userDB.data.name;
+    this.userId = userDbId;
     this.showPosts();
-
   },
   methods: {
     showPosts() {
       let config = {
         headers: {
-          token: this.token
-        }
-      }
+          token: this.token,
+        },
+      };
       this.axios
         .get("/posts", config)
         .then((res) => {
           this.posts = res.data;
-          console.log(res.data)
         })
         .catch((err) => {
           console.log(err.response);
         });
     },
     addPost() {
-       let config = {
+      let config = {
         headers: {
           token: this.token,
-        }
-      }
+        },
+      };
       this.axios
         .post("/new-post", this.NewPost, config)
         .then((res) => {
-          console.log(res.data)
           this.posts.push(res.data);
           this.NewPost.title = "";
           this.NewPost.name = "";
@@ -177,7 +175,7 @@ export default {
           this.posts[index].title = res.data.title;
           this.posts[index].description = res.data.description;
           this.message.color = "success";
-          this.message.text = "Post edited success";
+          this.message.text = "Post successfully edited";
           this.showAlert();
           this.edit = false;
         })
@@ -207,6 +205,6 @@ export default {
     showAlert() {
       this.dismissCountDown = this.dismissSecs;
     },
-  }
+  },
 };
 </script>

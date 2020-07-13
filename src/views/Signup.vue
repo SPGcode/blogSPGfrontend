@@ -57,6 +57,7 @@ export default {
                 router.push({name: 'login'});
             })
             .catch(err =>{
+                console.log("ërror hola")
                 console.log(err.response)
             })
         }

@@ -1,32 +1,19 @@
 <template>
-  <div class="home">
-    <!-- <img alt="logo" src="../assets/logo.jpg"> -->
+  <div class="home container mt-4">
     <h1>Home page</h1>
+    <h2 class="text-muted mb-4">News</h2>
     <div class="row">
-      <div class="col-sm-4" v-for="(item, index) in posts" :key="index">
-        <b-card
-        :title= item.title
-        style="max-width: 20rem;"
-        class="mb-2"
-        >
+      <div class="col-sm-4" v-for="(post, index) in posts" :key="index">
+        <b-card :title="post.title" style="max-width: 20rem;" class="mb-2">
           <b-card-body>
-            
-            <h6 class="card-subtitle mb-2 text-muted">{{item.name}}</h6>
-            <b-card-text>{{ item.description }}</b-card-text>
-            <b-button
-              class="btn-info mr-2 btn-sm"
-              @click="activateEdit(item._id)"
-              >Edit</b-button
-            >
-            <b-button class="btn-danger btn-sm" @click="deletePost(item._id)"
-              >Delete</b-button
+            <b-card-text>{{ post.description }}</b-card-text>
+            <b-card-text class="text-muted"
+              >User: {{ post.userName }}</b-card-text
             >
           </b-card-body>
         </b-card>
       </div>
     </div>
-
-
   </div>
 </template>
 
@@ -34,22 +21,22 @@
 // @ is an alias to /src
 
 export default {
-  name: 'Home',
+  name: "Home",
   data() {
     return {
-      posts: {}
-    }
+      posts: {},
+    };
   },
   created() {
     this.axios
-        .get("/posts")
-        .then((res) => {
-          this.posts = res.data;
-          console.log(res.data)
-        })
-        .catch((err) => {
-          console.log(err.response);
-        });
+      .get("/posts")
+      .then((res) => {
+        this.posts = res.data;
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
   },
-}
+};
 </script>

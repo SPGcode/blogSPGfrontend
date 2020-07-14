@@ -26,12 +26,20 @@ export default {
 </script>
 
 <style>
+h1, p {
+  font-family: 'Bangers', cursive;
+}
+body {
+  background-image: url("./img/paper.jpg")
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  
 }
 
 #nav {
@@ -45,5 +53,18 @@ export default {
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+
+#btn {
+  background-color: #A37A5A;
+}
+
+#post, #login{
+  border: black 2px solid;
+}
+
+.footer-card {
+  text-align: left;
+  margin-top: 2rem;
 }
 </style>

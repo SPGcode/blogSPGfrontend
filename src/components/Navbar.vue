@@ -1,7 +1,7 @@
 <template>
   <div>
-    <b-navbar toggleable="md" type="dark" variant="info">
-      <b-navbar-brand href="#">SPG Blog</b-navbar-brand>
+    <b-navbar toggleable="md" type="dark" variant="success">
+      <b-navbar-brand href="#">NICE Blog</b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -10,7 +10,6 @@
           <b-nav-item to="/">Home</b-nav-item>
           <b-nav-item to="/post">Blog</b-nav-item>
           <b-nav-item to="/login" v-if="!userActive">Login</b-nav-item>
-          <b-nav-item disabled>/</b-nav-item>
           <b-nav-item to="/signup" v-if="!userActive">Signup</b-nav-item>
         </b-navbar-nav>
 

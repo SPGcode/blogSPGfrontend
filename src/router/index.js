@@ -26,6 +26,11 @@ Vue.use(VueRouter)
     path: '/signup',
     name: 'signup',
     component: () => import(/* webpackChunkName: "signup" */ '../views/Signup.vue')
+  },
+  {
+    path: '/postview/:id',
+    name: 'postview',
+    component: () => import(/* webpackChunkName: "postview" */ '../views/Postview.vue')
   }
 ]
 

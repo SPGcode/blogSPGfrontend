@@ -1,6 +1,7 @@
 <template>
   <div class="container my-4">
     <b-card
+    id="login"
     title="Signup"
     style="max-width: 20rem"
     class="mb-2 mx-auto"
@@ -30,7 +31,7 @@
                 </b-form-input>
             </b-form-group>
             <b-button 
-            class="btn-info btn-block my-2 mx-2" 
+            class="btn-success btn-block my-2 mx-2" 
             type="submit"
             >
             Send

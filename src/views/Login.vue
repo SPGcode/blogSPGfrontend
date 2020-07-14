@@ -1,6 +1,6 @@
 <template>
   <div class="container my-4">
-    <b-card title="Login" style="max-width: 20rem" class="mb-2 mx-auto">
+    <b-card id="login" title="Login" style="max-width: 20rem" class="mb-2 mx-auto">
       <b-form @submit.prevent="login">
         <b-form-group>
           <b-form-input
@@ -18,7 +18,7 @@
           >
           </b-form-input>
         </b-form-group>
-        <b-button class="btn-info btn-block my-2 mx-2" type="submit">
+        <b-button class="btn-success btn-block my-2 mx-2" type="submit">
           Login
         </b-button>
       </b-form>

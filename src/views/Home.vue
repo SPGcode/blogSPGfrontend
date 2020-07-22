@@ -11,13 +11,13 @@
         img-top
         :title="post.title" 
         style="max-width: 20rem;" 
-        class="mb-2">
+        class="mb-2 shadow p-4 mb-5 rounded">
           <b-card-body>
             <b-card-text>{{ post.description }}</b-card-text>
             <b-card-text class="text-muted footer-card" style="font-style: italic;"
               >Written by: {{ post.userName }}</b-card-text
             >
-            <b-card-text class="text-muted footer-card"><small style="font-style: italic">{{ post.date }}</small></b-card-text>
+            <b-card-text class="text-muted"><small style="">{{ post.date }}</small></b-card-text>
           </b-card-body>
         </b-card>
       </div>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-// @ is an alias to /src
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: "Home",
@@ -35,15 +35,17 @@ export default {
       posts: {},
     };
   },
-  created() {
-    this.axios
-      .get("/posts")
-      .then((res) => {
-        this.posts = res.data;
-      })
-      .catch((err) => {
-        console.log(err.response);
-      });
+  computed:{
+    ...mapGetters(['allPosts'])
+  },
+
+  created: async function() {
+    await this.getAllPosts();
+    this.posts = this.allPosts;
+  },
+
+  methods: {
+    ...mapActions(['getAllPosts'])
   },
 };
 </script>

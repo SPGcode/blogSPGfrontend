@@ -4,7 +4,7 @@
     id="login"
     title="Signup"
     style="max-width: 20rem"
-    class="mb-2 mx-auto"
+    class="mb-2 mx-auto shadow p-3 mb-5 rounded"
     >
         <b-form @submit.prevent="addUser">
             <b-form-group>
@@ -58,7 +58,6 @@ export default {
                 router.push({name: 'login'});
             })
             .catch(err =>{
-                console.log("ërror hola")
                 console.log(err.response)
             })
         }

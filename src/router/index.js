@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import store from '../store'
+import {usersModule} from '../store/index'
 
 Vue.use(VueRouter)
 
@@ -43,8 +44,8 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
 
   const privateRoute = to.matched.some(record => record.meta.requireAuth);
-    if(privateRoute && store.state.token === ''){
-      next({name: 'login'})
+    if(privateRoute && store.state.usersModule.token === ''){
+      next({name: 'Home'})
     }else{
       next();
     }

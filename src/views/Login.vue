@@ -1,6 +1,6 @@
 <template>
   <div class="container my-4">
-    <b-card id="login" title="Login" style="max-width: 20rem" class="mb-2 mx-auto">
+    <b-card id="login" title="Login" style="max-width: 20rem" class="mb-2 mx-auto shadow p-3 mb-5 rounded">
       <b-form @submit.prevent="login">
         <b-form-group>
           <b-form-input
@@ -28,6 +28,7 @@
 
 <script>
 import { mapActions } from "vuex";
+import router from '../router'
 
 export default {
   data() {
@@ -47,6 +48,7 @@ export default {
         .then((res) => {
           const token = res.data.token;
           this.keepUser(token);
+          router.push({name: 'Post'});
         })
         .catch((err) => {
           console.error(err.response);

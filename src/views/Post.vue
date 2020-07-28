@@ -3,15 +3,13 @@
     <div class="row">
       <div class="col-sm-4">
         <b-alert
-          :show="dismissCountDown"
+          v-model="showDismissibleAlert"
           dismissible
           :variant="message.color"
-          @dismissed="dismissCountDown = 0"
-          @dismiss-count-down="countDownChanged"
         >
           <p>{{ message.text }}</p>
         </b-alert>
-        <b-form @submit.prevent="handleAdd(NewPost)" v-if="!edit">
+        <b-form @submit.prevent="handleAdd(NewPost)">
           <h3>New Post</h3>
           <b-form-group>
             <b-form-input
@@ -28,6 +26,11 @@
               required
               v-model="NewPost.description"
             ></b-form-textarea>
+            <b-form-file 
+            v-model="NewPost.image" 
+            class="mt-3" 
+            plain
+            ></b-form-file>
           </b-form-group>
           <b-button class="btn-success my-2 btn-block" type="submit">Add</b-button>
         </b-form>
@@ -68,7 +71,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 
 //jwt decode token
 import decode from "jwt-decode";
@@ -77,68 +80,44 @@ import decode from "jwt-decode";
 export default {
   data() {
     return {
-      posts: [],
+      posts:[],
       userName: "",
       userId: "",
-      dismissSecs: 3,
-      dismissCountDown: 0,
+      showDismissibleAlert: false,
       message: { color: "", text: "" },
-      NewPost: { title: "", name: "", description: "" },
-      EditPost: {},
-      edit: false,
+      NewPost: { title: "", name: "", description: "", image: null },
     };
   },
   computed: {
     ...mapState({
-      token: state => state.usersModule.token,
+      //token: state => state.usersModule.token,
       userDB: state => state.usersModule.userDB,
     }),
-    ...mapGetters(['allPosts'])
-
-  },
-  created() {
+    ...mapGetters(['allPosts', 'getMessage']),
+    },
+  async created() {
     const userDbId = this.userDB.data._id;
     this.userName = this.userDB.data.name;
     this.userId = userDbId;
-    this.getAllPosts();
+    await this.getAllPosts();
     this.posts = this.allPosts;
   },
   methods: {
-    ...mapActions(['getAllPosts', 'addPost']),
+    ...mapActions(['addPost', 'deletePost', 'getAllPosts', 'changeColor', 'changeText']),
     async handleAdd(post){
-      await this.addPost(post)
-      await this.clearForm()
-        //estos dos metodos de abajo se repiten en el created(), cambiar a otro lifecycle method
-      this.getAllPosts();
-      this.posts = this.allPosts;
+      await this.addPost(post);
+      await this.clearForm();
+      this.showDismissibleAlert = true;
+      this.changeColor('success');
+      this.changeText('Post added successfully')
+      this.message = this.getMessage;
+      location.reload()
     },
     clearForm (){
         this.NewPost.title = "";
         this.NewPost.name = "";
         this.NewPost.description = "";
-    },
-    deletePost(id) {
-      this.axios
-        .delete(`/post/${id}`)
-        .then((res) => {
-          const index = this.posts.findIndex(
-            (item) => item._id === res.data._id
-          );
-          this.posts.splice(index, 1);
-          this.message.color = "success";
-          this.message.text = "Post deleted";
-          this.showAlert();
-        })
-        .catch((err) => {
-          console.log(err.response);
-        });
-    },
-    countDownChanged(dismissCountDown) {
-      this.dismissCountDown = dismissCountDown;
-    },
-    showAlert() {
-      this.dismissCountDown = this.dismissSecs;
-    },
-  },
+    }
+  }
 };
 </script>

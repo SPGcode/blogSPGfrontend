@@ -44,7 +44,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
 
   const privateRoute = to.matched.some(record => record.meta.requireAuth);
-    if(privateRoute && store.state.usersModule.token === ''){
+    if(privateRoute && !localStorage.token){
       next({name: 'Home'})
     }else{
       next();

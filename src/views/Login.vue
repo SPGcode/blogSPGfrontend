@@ -21,6 +21,7 @@
         <b-button class="btn-success btn-block my-2 mx-2" type="submit">
           Login
         </b-button>
+        <p style="color: red;"> {{message}} </p>
       </b-form>
     </b-card>
   </div>
@@ -37,6 +38,7 @@ export default {
         mail: "",
         pass: "",
       },
+      message:""
     };
   },
   methods: {
@@ -51,7 +53,7 @@ export default {
           router.push({name: 'Post'});
         })
         .catch((err) => {
-          console.error(err.response);
+          this.message = err.response.data.mes
         });
     },
   },

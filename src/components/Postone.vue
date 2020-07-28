@@ -2,15 +2,6 @@
     <div>
        <h1 style="color: blue;"> {{ post.title }} </h1>
         <div class="col-sm-12 d-block" v-if="!edit">
-                  <b-alert
-          :show="dismissCountDown"
-          dismissible
-          :variant="message.color"
-          @dismissed="dismissCountDown = 0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <p>{{ message.text }}</p>
-        </b-alert>
         <b-card
           id="post"
           img-src="https://picsum.photos/600/300/?image=22"
@@ -76,9 +67,6 @@ export default {
      data() {
     return {
       post: {},
-      dismissSecs: 3,
-      dismissCountDown: 0,
-      message: { color: "", text: "" },
       EditPost: {},
       edit: false,
     };
@@ -104,28 +92,19 @@ export default {
        });
     },
     editPost(item) {
+  
        this.axios
        .put(`/post/${item._id}`, item)
        .then((res) => {
          this.post.title = res.data.title;
          this.post.description = res.data.description;
-         this.message.color = "success";
-         this.message.text = "Post successfully edited";
-         this.showAlert();
          this.edit = false;
          router.push({name: 'Post'})
        })
        .catch((err) => {
          console.log(err.response);
        });
-    },
-
-    countDownChanged(dismissCountDown) {
-      this.dismissCountDown = dismissCountDown;
-      },
-    showAlert() {
-      this.dismissCountDown = this.dismissSecs;
-     },
-  },
+    }
+  }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>post viewer</h1>
+        <h1>Post viewer</h1>
         <Postone/>
     </div>
 </template>

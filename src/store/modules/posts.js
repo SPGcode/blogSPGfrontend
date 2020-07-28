@@ -5,7 +5,7 @@ const state = {
 }
 
 const getters = {
-    allPosts: state => state.posts
+    allPosts: state =>  [...state.posts].reverse()
 }
 
 const actions = {
@@ -24,27 +24,36 @@ const actions = {
         await axios
           .post("/new-post", post, config)
           .then((response) => {
-            commit('setPost', response.data)
-            //this.message.color = "success";
-            //this.message.text = "Post added";
-            //this.showAlert();
+            commit('setPost', response.data);
           })
           .catch((err) => {
             console.log(err.response);
-            // if (err.response.data.err.message) {
-            //   this.message.text = err.response.data.err.message;
-            // } else {
-            //   this.message.text = "System error";
-            // }
-            // this.message.color = "danger";
-            // this.showAlert();
           });
       },
+    async deletePost({commit},id) {
+      console.log(id)
+         await axios         
+         .delete(`/post/${id}`)
+         .then((res) => {
+         let posts = state.posts
+         const index = posts.findIndex(
+         (item) => item._id === res.data._id);
+         commit("deletePost", index);
+         location.reload();
+         })
+        .catch((err) => {
+          console.log(err.response);
+        });
+      },
+      addImage(file){
+        
+      }
 }
 
 const mutations = {
-    setAllPosts: (state, payload) => ( state.posts = payload),
-    setPost: (state, payload) => (state.posts.push(payload))
+    setAllPosts: (state, payload) => (state.posts = payload),
+    setPost: (state, payload) => (state.posts.push(payload)),
+    deletePost: (state, i) => (state.posts.splice(i, 1))
 }
 
 export default {

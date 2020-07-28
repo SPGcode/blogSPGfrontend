@@ -32,7 +32,7 @@ export default {
   name: "Home",
   data() {
     return {
-      posts: {},
+      posts: [],
     };
   },
   computed:{

@@ -24,6 +24,7 @@ const actions = {
         await axios
           .post("/new-post", post, config)
           .then((response) => {
+            console.log(response.data)
             commit('setPost', response.data);
           })
           .catch((err) => {

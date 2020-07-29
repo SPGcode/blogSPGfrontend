@@ -31,7 +31,7 @@
             <template v-slot:button-content>
               <em>User</em>
             </template>
-            <b-dropdown-item href="#">Profile</b-dropdown-item>
+            <b-dropdown-item to="/Profileview">Profile</b-dropdown-item>
             <b-dropdown-item @click="closeSession()"
               >Close Session</b-dropdown-item
             >

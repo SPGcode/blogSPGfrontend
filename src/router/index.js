@@ -32,6 +32,11 @@ Vue.use(VueRouter)
     path: '/postview/:id',
     name: 'postview',
     component: () => import(/* webpackChunkName: "postview" */ '../views/Postview.vue')
+  },
+  {
+    path: '/profileview',
+    name: 'profileview',
+    component: () => import(/* webpackChunkName: "postview" */ '../views/Profileview.vue')
   }
 ]
 

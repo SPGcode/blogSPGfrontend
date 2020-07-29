@@ -26,11 +26,6 @@
               required
               v-model="NewPost.description"
             ></b-form-textarea>
-            <b-form-file 
-            v-model="NewPost.image" 
-            class="mt-3" 
-            plain
-            ></b-form-file>
           </b-form-group>
           <b-button class="btn-success my-2 btn-block" type="submit">Add</b-button>
         </b-form>
@@ -85,7 +80,7 @@ export default {
       userId: "",
       showDismissibleAlert: false,
       message: { color: "", text: "" },
-      NewPost: { title: "", name: "", description: "", image: null },
+      NewPost: { title: "", name: "", description: ""},
     };
   },
   computed: {
@@ -105,6 +100,7 @@ export default {
   methods: {
     ...mapActions(['addPost', 'deletePost', 'getAllPosts', 'changeColor', 'changeText']),
     async handleAdd(post){
+      console.log(post)
       await this.addPost(post);
       await this.clearForm();
       this.showDismissibleAlert = true;
